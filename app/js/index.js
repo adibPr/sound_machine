@@ -2,21 +2,7 @@
 
 'use strict'
 
-const {ipcRenderer} = require ('electron')
-
-var closeE1 = document.querySelector ('.close');
-closeE1.addEventListener ('click', function () {
-  console.log ("Clicked!, sending");
-  ipcRenderer.send ('close-main-window');
-});
-
-var soundButtons = document.querySelectorAll ('.button-sound');
-for (var i = 0; i < soundButtons.length; i++) {
-  var soundButton = soundButtons[i];
-  var soundName = soundButton.attributes['data-sound'].value;
-
-  prepareButton (soundButton, soundName);
-}
+const {ipcRenderer} = require ('electron') // destructuring, meaning only get electron.ipcRenderer
 
 function prepareButton (soundButton, soundName) {
   soundButton.querySelector ('span').style.backgroundImage = 'url("img/icons/' + soundName + '.png")';
@@ -28,3 +14,21 @@ function prepareButton (soundButton, soundName) {
   });
 }
 
+var soundButtons = document.querySelectorAll ('.button-sound');
+for (var i = 0; i < soundButtons.length; i++) {
+  var soundButton = soundButtons[i];
+  var soundName = soundButton.attributes['data-sound'].value;
+
+  prepareButton (soundButton, soundName);
+}
+
+var closeE1 = document.querySelector ('.close');
+closeE1.addEventListener ('click', function () {
+  // send signal to close-main-window
+  ipcRenderer.send ('close-main-window');
+});
+
+ipcRenderer.on ('global-shortcut', function (event, arg) {
+  var clck_ev = new MouseEvent ('click'); 
+  soundButtons[arg].dispatchEvent (clck_ev);
+});
