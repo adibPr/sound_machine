@@ -28,6 +28,11 @@ closeE1.addEventListener ('click', function () {
   ipcRenderer.send ('close-main-window');
 });
 
+var settingsE1 = document.querySelector ('.settings');
+settingsE1.addEventListener ('click', () => {
+  ipcRenderer.send ('open-settings-window');
+});
+
 ipcRenderer.on ('global-shortcut', function (event, arg) {
   var clck_ev = new MouseEvent ('click'); 
   soundButtons[arg].dispatchEvent (clck_ev);
